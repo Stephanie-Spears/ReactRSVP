@@ -126,6 +126,7 @@ class App extends Component {
 }
 
 export default App;
+//TODO: connect PostgreSQL backend and login auth for Heroku persistence
 
 
 //STATE: The data an app uses to change what and how it displays
