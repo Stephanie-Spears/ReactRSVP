@@ -5,6 +5,7 @@ import GuestList from "./GuestList";
 
 class App extends Component {
   state = {
+    isFiltered: false,
     guests: [
       {
         name: 'Stephanie Spears',
@@ -58,6 +59,11 @@ class App extends Component {
       })
     });
 
+
+  toggleFilter = () =>
+    this.setState({ isFiltered: !this.state.isFiltered });
+
+
   getTotalInvited = () => this.state.guests.length;
   //getAttendingGuests = () =>
   //getUnconfirmedGuests = () =>
@@ -77,7 +83,11 @@ class App extends Component {
           <div>
             <h2>Invitees</h2>
             <label>
-              <input type="checkbox" /> Hide those who haven't responded
+              <input
+                type="checkbox"
+                onChange={this.toggleFilter}
+                checked={this.state.isFiltered}
+              /> Hide those who haven't responded
             </label>
           </div>
           <table className="counter">
@@ -101,6 +111,7 @@ class App extends Component {
                      toggleConfirmationAt={this.toggleConfirmationAt}
                      toggleEditingAt={this.toggleEditingAt}
                      setNameAt={this.setNameAt}
+                     isFiltered={this.state.isFiltered}
           />
 
         </div>
@@ -121,3 +132,4 @@ export default App;
 //KEY PROPERTY: helps identfy which items have changed, been added, or removed
 //SPREAD(...)OPERATOR: Copy all of an object's properties into a new object literal-> transfers keys/values (instead of explicitly adding values, and then having to update if they change)
 //WHEN A USER CLICKS A CONNECTED FORM ELEMENT: the state is set first, then the element changes to show the new state
+//MAP METHOD: the map() method creates a new array with the results of calling a provided function on every element in the calling array.
