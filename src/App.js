@@ -148,6 +148,7 @@ class App extends Component {
                      setNameAt={this.setNameAt}
                      isFiltered={this.state.isFiltered}
                      removeGuestAt={this.removeGuestAt}
+                     pendingGuest={this.state.pendingGuest}
           />
 
         </div>
@@ -172,3 +173,4 @@ export default App;
 //FILTER METHOD: the filter() method creates a copy of an array while removing some of it's elements
 //IF VALUE IS A VARIABLE, !value evaluates to TRUE when value is false
 //IF VARIABLE isFiltered is FALSE, !isFiltered && 'showAll' evaluates to the string 'showAll'
+//PROP-TYPES LIBRARY: React lib ensures props passed into component are type program expects
