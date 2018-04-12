@@ -6,6 +6,7 @@ import GuestList from "./GuestList";
 class App extends Component {
   state = {
     isFiltered: false,
+    pendingGuest: "",
     guests: [
       {
         name: 'Stephanie Spears',
@@ -64,6 +65,26 @@ class App extends Component {
     this.setState({ isFiltered: !this.state.isFiltered });
 
 
+  handleNameInput = e =>
+    this.setState({ pendingGuest: e.target.value });
+
+  newGuestSubmitHandler = e => {
+    e.preventDefault();
+    this.setState({
+      guests: [
+        {
+          name: this.state.pendingGuest,
+          isConfirmed: false,
+          isEditing: false,
+        },
+        ...this.state.guests
+      ],
+      pendingGuest: '',
+    });
+  };
+
+
+
   getTotalInvited = () => this.state.guests.length;
   //getAttendingGuests = () =>
   //getUnconfirmedGuests = () =>
@@ -74,9 +95,15 @@ class App extends Component {
         <header>
           <h1>RSVP</h1>
           <p>A React App</p>
-          <form>
-            <input type="text" value="Safia" placeholder="Invite Someone" />
-              <button type="submit" name="submit" value="submit">Submit</button>
+          <form onSubmit={this.newGuestSubmitHandler}>
+            <input type="text"
+                   onChange={this.handleNameInput}
+                   value={this.state.pendingGuest}
+                   placeholder="Invite Someone"
+            />
+              <button type="submit"
+                      name="submit"
+                      value="submit">Submit</button>
           </form>
         </header>
         <div className="main">
@@ -133,3 +160,6 @@ export default App;
 //SPREAD(...)OPERATOR: Copy all of an object's properties into a new object literal-> transfers keys/values (instead of explicitly adding values, and then having to update if they change)
 //WHEN A USER CLICKS A CONNECTED FORM ELEMENT: the state is set first, then the element changes to show the new state
 //MAP METHOD: the map() method creates a new array with the results of calling a provided function on every element in the calling array.
+//FILTER METHOD: the filter() method creates a copy of an array while removing some of it's elements
+//IF VALUE IS A VARIABLE, !value evaluates to TRUE when value is false
+//IF VARIABLE isFiltered is FALSE, !isFiltered && 'showAll' evaluates to the string 'showAll'
