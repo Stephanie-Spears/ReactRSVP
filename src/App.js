@@ -24,20 +24,39 @@ class App extends Component {
     ]
   };
 
-  //Handler to confirm guests
-  //Confirmation is a boolean, so we don't need to accept a value from the checkbox, we can simply flip the value every time it's clicked (ie. when the event is triggered)
-  toggleConfirmationAt = indexToChange => //takes index as arg
+  //Handler to confirm or edit guests
+  toggleGuestPropertyAt = (property, indexToChange) =>
     this.setState({
       guests: this.state.guests.map((guest, index) => {
         if(index === indexToChange){
           return {
-            ...guest, //object spread operator
-            isConfirmed: !guest.isConfirmed //flip isConfirmed value
+            ...guest,
+            [property]: !guest[property] //flip value
           };
         }
         return guest;
       })
     }); //need to pass this method down to Guest component and bind it to the checkboxes change event
+
+  toggleConfirmationAt = index =>
+    this.toggleGuestPropertyAt("isConfirmed", index);
+
+  toggleEditingAt = index =>
+    this.toggleGuestPropertyAt("isEditing", index);
+
+
+  setNameAt = (name, indexToChange) =>
+    this.setState({
+      guests: this.state.guests.map((guest, index) => {
+        if(index === indexToChange){
+          return {
+            ...guest,
+            name,
+          };
+        }
+        return guest;
+      })
+    });
 
   getTotalInvited = () => this.state.guests.length;
   //getAttendingGuests = () =>
@@ -80,6 +99,8 @@ class App extends Component {
 
           <GuestList guests={this.state.guests}
                      toggleConfirmationAt={this.toggleConfirmationAt}
+                     toggleEditingAt={this.toggleEditingAt}
+                     setNameAt={this.setNameAt}
           />
 
         </div>

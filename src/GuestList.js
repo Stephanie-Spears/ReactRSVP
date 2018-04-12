@@ -9,7 +9,10 @@ const GuestList = props =>
       key={index}
       name={guest.name}
       isConfirmed={guest.isConfirmed}
-      handleConfirmation={() => props.toggleConfirmationAt(index)} //CLOSURE: A COMBO OF A FUNCTION AND THE SCOPE VARIABLES IT WAS DECLARED WITH // this function will call toggleConfirmationAt and pass index value with it, so it's available HIGHER in the dom
+      isEditing={guest.isEditing}
+      handleConfirmation={() => props.toggleConfirmationAt(index)} //closure
+      handleToggleEditing={() => props.toggleEditingAt(index)}
+      setName={text => props.setNameAt(text, index)}
     />
       )}
   </ul>;
@@ -18,6 +21,8 @@ const GuestList = props =>
 GuestList.propTypes = {
   guests: PropTypes.array.isRequired,
   toggleConfirmationAt: PropTypes.func.isRequired,
+  toggleEditingAt: PropTypes.func.isRequired,
+  setNameAt: PropTypes.func.isRequired,
 };
 
 export default GuestList;
