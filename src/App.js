@@ -174,3 +174,5 @@ export default App;
 //IF VALUE IS A VARIABLE, !value evaluates to TRUE when value is false
 //IF VARIABLE isFiltered is FALSE, !isFiltered && 'showAll' evaluates to the string 'showAll'
 //PROP-TYPES LIBRARY: React lib ensures props passed into component are type program expects
+//TO ALLOW A CHILD COMPONENT TO CHANGE ITS PARENT'S STATE IN RESPONSE TO USER EVENTS, THE EVENT HANDLER NEEDS TO BE DEFINED ON THE PARENT
+//TO PASS DATA TO A CHILD COMPONENT FROM ITS PARENT, THE DATA NEEDS TO GO ON THE CHILD'S PROPS
