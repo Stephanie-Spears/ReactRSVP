@@ -1,37 +1,30 @@
 import React, { Component } from 'react';
 import './App.css';
-import GuestList from './GuestList';
-import Counter from './Counter';
+
+import Header from './Header';
+import MainContent from './MainContent';
 
 
 class App extends Component {
   state = {
     isFiltered: false,
     pendingGuest: "",
-    guests: [
-      {
-        name: 'Stephanie Spears',
-        isConfirmed: false,
-        isEditing: false,
-      },
-      {
-        name: 'Max Smiley',
-        isConfirmed: true,
-        isEditing: false,
-      },
-      {
-        name: 'Cody Long',
-        isConfirmed: false,
-        isEditing: true,
-      },
-    ]
+    guests: []
+  };
+
+  lastGuestId = 0;
+
+  newGuestId = () => {
+    const id = this.lastGuestId;
+    this.lastGuestId += 1;
+    return id;
   };
 
   //Handler to confirm or edit guests
-  toggleGuestPropertyAt = (property, indexToChange) =>
+  toggleGuestProperty = (property, id) =>
     this.setState({
-      guests: this.state.guests.map((guest, index) => {
-        if(index === indexToChange){
+      guests: this.state.guests.map(guest => {
+        if(id === guest.id){
           return {
             ...guest,
             [property]: !guest[property] //flip value
@@ -41,24 +34,21 @@ class App extends Component {
       })
     }); //need to pass this method down to Guest component and bind it to the checkboxes change event
 
-  toggleConfirmationAt = index =>
-    this.toggleGuestPropertyAt("isConfirmed", index);
+  toggleConfirmation = id =>
+    this.toggleGuestProperty("isConfirmed", id);
 
-  toggleEditingAt = index =>
-    this.toggleGuestPropertyAt("isEditing", index);
+  toggleEditing = id =>
+    this.toggleGuestProperty("isEditing", id);
 
-  removeGuestAt = index =>
+  removeGuest = id =>
     this.setState({
-      guests: [
-        ...this.state.guests.slice(0, index),
-        ...this.state.guests.slice(index+1)
-      ]
+      guests: this.state.guests.filter(guest => id !== guest.id)
     });
 
-  setNameAt = (name, indexToChange) =>
+  setName = (name, id) =>
     this.setState({
-      guests: this.state.guests.map((guest, index) => {
-        if(index === indexToChange){
+      guests: this.state.guests.map(guest => {
+        if(id === guest.id){
           return {
             ...guest,
             name,
@@ -78,20 +68,20 @@ class App extends Component {
 
   newGuestSubmitHandler = e => {
     e.preventDefault();
+    const id = this.newGuestId();
     this.setState({
       guests: [
         {
           name: this.state.pendingGuest,
           isConfirmed: false,
           isEditing: false,
+          id,
         },
         ...this.state.guests
       ],
       pendingGuest: '',
     });
   };
-
-
 
   getTotalInvited = () => this.state.guests.length;
 
@@ -109,49 +99,27 @@ class App extends Component {
 
     return (
       <div className="App">
-        <header>
-          <h1>RSVP</h1>
-          <p>A React App</p>
-          <form onSubmit={this.newGuestSubmitHandler}>
-            <input type="text"
-                   onChange={this.handleNameInput}
-                   value={this.state.pendingGuest}
-                   placeholder="Invite Someone"
-            />
-              <button type="submit"
-                      name="submit"
-                      value="submit">Submit
-              </button>
-          </form>
-        </header>
-        <div className="main">
-          <div>
-            <h2>Invitees</h2>
-            <label>
-              <input
-                type="checkbox"
-                onChange={this.toggleFilter}
-                checked={this.state.isFiltered}
-              /> Hide those who haven't responded
-            </label>
-          </div>
 
-          <Counter
-            totalInvited={totalInvited}
-            numberAttending={numberAttending}
-            numberUnconfirmed={numberUnconfirmed}
-          />
+        <Header
+          newGuestSubmitHandler={this.newGuestSubmitHandler}
+          pendingGuest={this.state.pendingGuest}
+          handleNameInput={this.handleNameInput}
+        />
 
-          <GuestList guests={this.state.guests}
-                     toggleConfirmationAt={this.toggleConfirmationAt}
-                     toggleEditingAt={this.toggleEditingAt}
-                     setNameAt={this.setNameAt}
-                     isFiltered={this.state.isFiltered}
-                     removeGuestAt={this.removeGuestAt}
-                     pendingGuest={this.state.pendingGuest}
-          />
+        <MainContent
+          toggleFilter={this.toggleFilter}
+          isFiltered={this.state.isFiltered}
+          totalInvited={totalInvited}
+          numberAttending={numberAttending}
+          numberUnconfirmed={numberUnconfirmed}
+          guests={this.state.guests}
+          toggleConfirmation={this.toggleConfirmation}
+          toggleEditing={this.toggleEditing}
+          setName={this.setName}
+          removeGuest={this.removeGuest}
+          pendingGuest={this.state.pendingGuest}
+        />
 
-        </div>
       </div>
     );
   }
@@ -166,7 +134,7 @@ export default App;
 
 //TO GET DATA FROM CHILD TO PARENT: You need to define a callback in the parent and pass it down to the child, and bind it to one of the child's events.
 //CLOSURE: Functions retain access to the scope in which they were defined.
-//KEY PROPERTY: helps identfy which items have changed, been added, or removed
+//KEY PROPERTY: helps identify which items have changed, been added, or removed
 //SPREAD(...)OPERATOR: Copy all of an object's properties into a new object literal-> transfers keys/values (instead of explicitly adding values, and then having to update if they change)
 //WHEN A USER CLICKS A CONNECTED FORM ELEMENT: the state is set first, then the element changes to show the new state
 //MAP METHOD: the map() method creates a new array with the results of calling a provided function on every element in the calling array.
