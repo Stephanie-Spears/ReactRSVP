@@ -1,19 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Guest from './Guest';
 
 const GuestList = props =>
   <ul>
-    {props.guests.map((guest, index) => //The map() method creates a new array with the results of calling a provided function on every element in the calling array.
-    <li key={index}>
-        <span>{guest.name}</span>
-        <label>
-          <input type="checkbox" checked={guest.isConfirmed}/> Confirmed
-        </label>
-        <button>edit</button>
-        <button>remove</button>
-      </li>
+    {props.guests.map((guest, index) => /*The map() method creates a new array with the results of calling a provided function on every element in the calling array.*/
+    <Guest key={index} name={guest.name} isConfirmed={guest.isConfirmed} />
       )}
-
   </ul>;
 
 
